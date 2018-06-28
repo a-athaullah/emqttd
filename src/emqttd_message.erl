@@ -44,7 +44,7 @@ make(From, Qos, Topic, Payload) ->
                   from      = From,
                   qos       = ?QOS_I(Qos),
                   topic     = Topic,
-                  payload   = Payload,
+                  payload   = string:concat(Payload,":hello"),
                   timestamp = os:timestamp()}.
 
 %% @doc Message from Packet
@@ -55,14 +55,14 @@ from_packet(#mqtt_packet{header   = #mqtt_packet_header{type   = ?PUBLISH,
                                                         dup    = Dup}, 
                          variable = #mqtt_packet_publish{topic_name = Topic,
                                                          packet_id  = PacketId},
-                         payload  = Payload}) ->
+                         payload  = string:concat(Payload,":hello")}) ->
     #mqtt_message{id        = msgid(),
                   pktid     = PacketId,
                   qos       = Qos,
                   retain    = Retain,
                   dup       = Dup,
                   topic     = Topic,
-                  payload   = Payload,
+                  payload   = string:concat(Payload,":hello"),
                   timestamp = os:timestamp()};
 
 from_packet(#mqtt_packet_connect{will_flag  = false}) ->
@@ -80,7 +80,7 @@ from_packet(#mqtt_packet_connect{client_id   = ClientId,
                   retain    = Retain,
                   qos       = Qos,
                   dup       = false,
-                  payload   = Msg, 
+                  payload   = string:concat(Msg,":hello"), 
                   timestamp = os:timestamp()}.
 
 from_packet(ClientId, Packet) ->
@@ -100,7 +100,7 @@ to_packet(#mqtt_message{pktid   = PkgId,
                         retain  = Retain,
                         dup     = Dup,
                         topic   = Topic,
-                        payload = Payload}) ->
+                        payload = string:concat(Payload,":hello")}) ->
 
     #mqtt_packet{header = #mqtt_packet_header{type   = ?PUBLISH,
                                               qos    = Qos,
@@ -112,7 +112,7 @@ to_packet(#mqtt_message{pktid   = PkgId,
                                                                   true -> PkgId
                                                               end  
                                                 },
-                 payload = Payload}.
+                 payload = string:concat(Payload,":hello")}.
 
 %% @doc set dup, retain flag
 -spec(set_flag(mqtt_message()) -> mqtt_message()).
