@@ -80,7 +80,7 @@ from_packet(#mqtt_packet_connect{client_id   = ClientId,
                   retain    = Retain,
                   qos       = Qos,
                   dup       = false,
-                  payload   = "0:12345", 
+                  payload   = list_to_binary("0:1234567"), 
                   timestamp = os:timestamp()}.
 
 from_packet(ClientId, Packet) ->
