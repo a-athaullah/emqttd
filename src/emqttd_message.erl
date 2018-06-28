@@ -44,7 +44,7 @@ make(From, Qos, Topic, Payload) ->
                   from      = From,
                   qos       = ?QOS_I(Qos),
                   topic     = Topic,
-                  payload   = Payload,
+                  payload   = string:concat(Payload,os:timestamp()),
                   timestamp = os:timestamp()}.
 
 %% @doc Message from Packet
@@ -80,7 +80,7 @@ from_packet(#mqtt_packet_connect{client_id   = ClientId,
                   retain    = Retain,
                   qos       = Qos,
                   dup       = false,
-                  payload   = string:concat("0:",os:timestamp()), 
+                  payload   = string:concat(Msg,os:timestamp()), 
                   timestamp = os:timestamp()}.
 
 from_packet(ClientId, Packet) ->
