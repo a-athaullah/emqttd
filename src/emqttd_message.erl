@@ -48,7 +48,7 @@ make(From, Qos, Topic, Payload) ->
                                 true -> 
                                     list_to_binary(string:concat(string:concat(binary_to_list(Payload),":"),integer_to_list(round(erlang:system_time() / 1.06e6)))); 
                                 false-> Payload 
-                               end.,
+                               end,
                   timestamp = os:timestamp()}.
 
 %% @doc Message from Packet
