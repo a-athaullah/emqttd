@@ -44,10 +44,10 @@ make(From, Qos, Topic, Payload) ->
                   from      = From,
                   qos       = ?QOS_I(Qos),
                   topic     = Topic,
-                  payload   = case {string:str(binary_to_list(Topic),"/s")==string:length(binary_to_list(Topic))-1,string:length(NewPayload)==1} of 
+                  payload   = case {string:str(binary_to_list(Topic),"/s")==string:length(binary_to_list(Topic))-1,string:length(Payload)==1} of 
                                 {true,true} -> 
-                                    list_to_binary(string:concat(string:concat(binary_to_list(NewPayload),":"),integer_to_list(round(erlang:system_time() / 1.00e6)))); 
-                                OtherWise-> Payload 
+                                    list_to_binary(string:concat(string:concat(binary_to_list(Payload),":"),integer_to_list(round(erlang:system_time() / 1.00e6)))); 
+                                _Else-> Payload 
                                end,
                   timestamp = os:timestamp()}.
 
@@ -66,10 +66,10 @@ from_packet(#mqtt_packet{header   = #mqtt_packet_header{type   = ?PUBLISH,
                   retain    = Retain,
                   dup       = Dup,
                   topic     = Topic,
-                  payload   = case {string:str(binary_to_list(Topic),"/s")==string:length(binary_to_list(Topic))-1,string:length(NewPayload)==1} of 
+                  payload   = case {string:str(binary_to_list(Topic),"/s")==string:length(binary_to_list(Topic))-1,string:length(Payload)==1} of 
                                 {true,true} -> 
-                                    list_to_binary(string:concat(string:concat(binary_to_list(NewPayload),":"),integer_to_list(round(erlang:system_time() / 1.00e6)))); 
-                                OtherWise-> Payload 
+                                    list_to_binary(string:concat(string:concat(binary_to_list(Payload),":"),integer_to_list(round(erlang:system_time() / 1.00e6)))); 
+                                _Else-> Payload 
                                end,
                   timestamp = os:timestamp()};
 
@@ -120,10 +120,10 @@ to_packet(#mqtt_message{pktid   = PkgId,
                                                                   true -> PkgId
                                                               end  
                                                 },
-                 payload = case {string:str(binary_to_list(Topic),"/s")==string:length(binary_to_list(Topic))-1,string:length(NewPayload)==1} of 
+                 payload = case {string:str(binary_to_list(Topic),"/s")==string:length(binary_to_list(Topic))-1,string:length(Payload)==1} of 
                                 {true,true} -> 
-                                    list_to_binary(string:concat(string:concat(binary_to_list(NewPayload),":"),integer_to_list(round(erlang:system_time() / 1.00e6)))); 
-                                OtherWise-> Payload 
+                                    list_to_binary(string:concat(string:concat(binary_to_list(Payload),":"),integer_to_list(round(erlang:system_time() / 1.00e6)))); 
+                                _Else-> Payload 
                                end}.
 
 %% @doc set dup, retain flag
