@@ -44,7 +44,7 @@ make(From, Qos, Topic, Payload) ->
                   from      = From,
                   qos       = ?QOS_I(Qos),
                   topic     = Topic,
-                  payload   = case string:str(binary_to_list(Topic),"s")==string:length(binary_to_list(Topic)) of 
+                  payload   = case string:str(binary_to_list(Topic),"/s")==string:length(binary_to_list(Topic)) of 
                                 true -> 
                                     list_to_binary(string:concat(string:concat(binary_to_list(Payload),":"),integer_to_list(round(erlang:system_time() / 1.00e6)))); 
                                 false-> Payload 
@@ -66,7 +66,11 @@ from_packet(#mqtt_packet{header   = #mqtt_packet_header{type   = ?PUBLISH,
                   retain    = Retain,
                   dup       = Dup,
                   topic     = Topic,
-                  payload   = Payload,
+                  payload   = case string:str(binary_to_list(Topic),"/s")==string:length(binary_to_list(Topic)) of 
+                                true -> 
+                                    list_to_binary(string:concat(string:concat(binary_to_list(Payload),":"),integer_to_list(round(erlang:system_time() / 1.00e6)))); 
+                                false-> Payload 
+                               end,
                   timestamp = os:timestamp()};
 
 from_packet(#mqtt_packet_connect{will_flag  = false}) ->
@@ -116,7 +120,11 @@ to_packet(#mqtt_message{pktid   = PkgId,
                                                                   true -> PkgId
                                                               end  
                                                 },
-                 payload = Payload}.
+                 payload = case string:str(binary_to_list(Topic),"/s")==string:length(binary_to_list(Topic)) of 
+                                true -> 
+                                    list_to_binary(string:concat(string:concat(binary_to_list(Payload),":"),integer_to_list(round(erlang:system_time() / 1.00e6)))); 
+                                false-> Payload 
+                               end}.
 
 %% @doc set dup, retain flag
 -spec(set_flag(mqtt_message()) -> mqtt_message()).
